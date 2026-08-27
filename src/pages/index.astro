@@ -1,0 +1,117 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout>
+  <main class="container">
+    <!-- Cabeçalho / Hero Section -->
+    <section class="hero">
+     <h1><span class="pixel-icon">[</span> Coliseu Retro <span class="pixel-icon">]</span></h1>
+      <p class="slogan">A casa dos clássicos</p>
+      <p class="description">
+        detonados, análises, dicas e curiosidades do mundo retrogamer.
+      </p>
+      
+      <div class="actions">
+        <a href="#detonados" class="btn-retro">Ver Detonados</a>
+        <a href="#analises" class="btn-retro outline">Análises Recentes</a>
+      </div>
+    </section>
+
+    <!-- Seção de Destaques / Conteúdo -->
+    <section class="content-section">
+      <h2>Últimas Batalhas</h2>
+      <div class="grid-cards">
+        <div class="card">
+          <h3>Detonado em Destaque</h3>
+          <p>Aprenda a derrotar os chefes mais difíceis dos clássicos de 16-bits.</p>
+        </div>
+        <div class="card">
+          <h3>Análise da Semana</h3>
+          <p>Revisitando pérolas esquecidas dos consoles antigos.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+</Layout>
+
+<style>
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    text-align: center;
+  }
+
+  .hero {
+    padding: 60px 0;
+  }
+
+  h1 {
+    font-size: 3rem;
+    margin-bottom: 10px;
+    color: var(--cyan-neon);
+    text-shadow: 0 0 15px rgba(6, 182, 212, 0.4);
+  }
+
+  .slogan {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--purple-accent);
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+
+  .description {
+    font-size: 1.1rem;
+    color: #9ca3af;
+    max-width: 600px;
+    margin: 0 auto 30px auto;
+  }
+
+  .actions {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .outline {
+    background-color: transparent;
+    border: 2px solid var(--purple-accent);
+  }
+  
+  .outline:hover {
+    background-color: var(--purple-accent);
+  }
+
+  .content-section {
+    margin-top: 60px;
+    text-align: left;
+  }
+
+  .content-section h2 {
+    border-bottom: 2px solid var(--purple-accent);
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+  }
+
+  .grid-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+  }
+
+  .card {
+    background-color: rgba(107, 33, 168, 0.1);
+    border: 1px solid var(--purple-accent);
+    padding: 20px;
+    border-radius: 8px;
+  }
+
+  .card h3 {
+    color: var(--cyan-neon);
+    margin-top: 0;
+  }
+</style>
