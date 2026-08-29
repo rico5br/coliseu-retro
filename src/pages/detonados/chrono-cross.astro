@@ -1,0 +1,72 @@
+---
+import Layout from "../../layouts/Layout.astro";
+
+const paginas = Array.from({ length: 46 }, (_, i) => i + 1);
+---
+
+<Layout title="Detonado de Chrono Cross">
+
+  <main>
+
+   <header class="cabecalho">
+  <h1>Detonado de Chrono Cross</h1>
+
+  <p>
+    Detonado completo de Chrono Cross para PlayStation.
+  </p>
+</header>
+
+
+    <section class="detonado">
+
+      {paginas.map((pagina) => (
+        <img
+          src={`/imagens/chrono-cross/${pagina}.jpg`}
+          alt={`Página ${pagina} do detonado de Chrono Cross`}
+        />
+      ))}
+
+    </section>
+
+  </main>
+
+</Layout>
+
+
+<style>
+
+  main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 60px 20px;
+  }
+
+
+  .cabecalho {
+    text-align: center;
+    margin-bottom: 50px;
+  }
+
+
+
+
+
+  h1 {
+    color: #00eaff;
+  }
+
+
+  p {
+    color: #aaa;
+  }
+
+
+  .detonado img {
+    display: block;
+    width: 100%;
+    max-width: 900px;
+    height: auto;
+    margin: 0 auto 30px;
+  }
+
+</style>
