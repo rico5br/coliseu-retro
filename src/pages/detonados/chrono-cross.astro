@@ -76,5 +76,31 @@ const paginas = Array.from({ length: 46 }, (_, i) => i + 1);
     height: auto;
     margin: 0 auto 30px;
   }
+.logo-link {
+  display: inline-block;
+  margin-bottom: 20px;
+}
 
+.logo {
+  width: 180px;
+  height: auto;
+  display: block;
+  transition: transform 0.2s ease;
+}
+
+.logo-link:hover .logo {
+  transform: scale(1.05);
+}
+
+.voltar {
+  display: inline-block;
+  margin-top: 25px;
+  color: #00eaff;
+  text-decoration: none;
+}
+
+.voltar:hover {
+  color: #ff00ff;
+  text-decoration: underline;
+}
 </style>
