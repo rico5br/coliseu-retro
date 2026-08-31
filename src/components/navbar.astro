@@ -13,10 +13,10 @@
 </header>
 
 <style>
-  .navbar {
+.navbar {
     width: 100%;
     border-bottom: 1px solid rgba(107, 33, 168, 0.4);
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: rgba(0, 0, 0, 0.9);
     position: sticky;
     top: 0;
     z-index: 100;
@@ -26,12 +26,65 @@
   .nav-container {
     max-width: 900px;
     margin: 0 auto;
-    padding: 15px 20px;
+    padding: 12px 15px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 15px;
   }
 
+  .nav-logo {
+    font-weight: bold;
+    color: var(--cyan-neon, #06b6d4);
+    text-decoration: none;
+    font-size: 1.1rem;
+    text-shadow: 0 0 10px rgba(6, 182, 212, 0.3);
+    white-space: nowrap; /* Impede que o logo quebre linha */
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 15px;
+    overflow-x: auto; /* Permite rolar pro lado no celular se faltar espaço */
+    padding-bottom: 4px; /* Espaço para a barra de rolagem sutil se houver */
+  }
+
+  .nav-links::-webkit-scrollbar {
+    display: none; /* Esconde a barra de rolagem no Chrome/Safari para ficar limpo */
+  }
+
+  .nav-links a {
+    color: #9ca3af;
+    text-decoration: none;
+    font-size: 0.9rem;
+    white-space: nowrap; /* Mantém cada categoria em uma linha única */
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover {
+    color: var(--cyan-neon, #06b6d4);
+  }
+
+  /* Ajuste automático para celulares menores */
+  @media (max-width: 768px) {
+    .nav-container {
+      flex-direction: column;
+      align-items: center;
+      padding: 10px;
+      gap: 8px;
+    }
+
+    .nav-links {
+      width: 100%;
+      justify-content: center;
+      flex-wrap: wrap; /* No celular, se preferir que quebre linha centralizado ao invés de rolar */
+      gap: 12px;
+    }
+    
+    .nav-links a {
+      font-size: 0.85rem;
+    }
+  }
   .nav-logo {
     font-weight: bold;
     color: var(--cyan-neon, #06b6d4);
