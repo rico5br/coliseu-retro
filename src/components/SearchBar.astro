@@ -32,12 +32,17 @@
     let pagefindInstance = null;
     let debounceTimeout;
 
+    // Fecha os resultados ao clicar fora
     document.addEventListener('click', (e) => {
-      if (!input.contains(e.target) && !resultsContainer.contains(e.target)) {
-         resultsContainer.style.display = 'none';
+      if (
+        !input.contains(e.target) &&
+        !resultsContainer.contains(e.target)
+      ) {
+        resultsContainer.style.display = 'none';
       }
     });
 
+    // Mostra novamente os resultados ao focar no input
     input.addEventListener('focus', () => {
       if (input.value.trim() !== '') {
         resultsContainer.style.display = 'block';
@@ -46,59 +51,61 @@
 
     input.addEventListener('input', (e) => {
       clearTimeout(debounceTimeout);
-      
-      debounceTimeout = setTimeout(async () => {
-        const target = e.target;
-        const query = target ? target.value : '';
 
+      debounceTimeout = setTimeout(async () => {
+        const query = e.target.value;
+
+        // Se estiver vazio, esconde os resultados
         if (!query.trim()) {
           resultsContainer.innerHTML = '';
           resultsContainer.style.display = 'none';
           return;
         }
 
-        if (!pagefindInstance) {
-          try {
-            pagefindInstance = await new Promise((resolve, reject) => {
-              if (window.pagefind) {
-                resolve(window.pagefind);
-                return;
-              }
-              const script = document.createElement('script');
-              script.src = '/pagefind/pagefind.js';
-              script.onload = async () => {
-                try {
-                  await window.pagefind.init();
-                  resolve(window.pagefind);
-                } catch (initErr) {
-                  reject(initErr);
-                }
-              };
-              script.onerror = () => reject(new Error("Falha ao baixar /pagefind/pagefind.js (Arquivo não encontrado no servidor)."));
-              document.head.appendChild(script);
-            });
-          } catch (err) {
-            console.error("Detalhe do erro do Pagefind:", err);
-            resultsContainer.innerHTML = `<p class="no-results" style="color: #ff6b6b; font-size: 0.8rem;">Erro: ${err.message}</p>`;
-            resultsContainer.style.display = 'block';
-            return;
+        try {
+          // Carrega o Pagefind apenas na primeira busca
+          if (!pagefindInstance) {
+            pagefindInstance = await import('/pagefind/pagefind.js');
           }
+
+          // Faz a busca
+          const search = await pagefindInstance.search(query);
+
+          // Obtém os dados completos dos resultados
+          const results = await Promise.all(
+            search.results.map((result) => result.data())
+          );
+
+          resultsContainer.style.display = 'block';
+
+          if (results.length > 0) {
+            resultsContainer.innerHTML = results
+              .map((page) => `
+                <div class="result-item">
+                  <a href="${page.url}">
+                    <h4>${page.meta.title || 'Página'}</h4>
+                    <p>${page.excerpt}</p>
+                  </a>
+                </div>
+              `)
+              .join('');
+          } else {
+            resultsContainer.innerHTML =
+              '<p class="no-results">Nenhum resultado encontrado.</p>';
+          }
+
+        } catch (err) {
+          console.error('Detalhe do erro do Pagefind:', err);
+
+          resultsContainer.innerHTML = `
+            <p class="no-results" style="color: #ff6b6b; font-size: 0.8rem;">
+              Erro na busca: ${err.message}
+            </p>
+          `;
+
+          resultsContainer.style.display = 'block';
         }
 
-        const search = await pagefindInstance.search(query);
-        const results = await Promise.all(search.results.map((r) => r.data()));
-
-        resultsContainer.style.display = 'block';
-        resultsContainer.innerHTML = results.length > 0 
-          ? results.map(page => `
-              <div class="result-item">
-                <a href="${page.url}">
-                  <h4>${page.meta.title || 'Página'}</h4>
-                  <p>${page.excerpt}</p>
-                </a>
-              </div>
-            `).join('')
-          : '<p class="no-results">Nenhum resultado encontrado.</p>';
       }, 300);
     });
   }
