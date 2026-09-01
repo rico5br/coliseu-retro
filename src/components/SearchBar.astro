@@ -29,17 +29,16 @@
   const resultsContainer = document.getElementById('search-results');
 
   if (input && resultsContainer) {
-    let pagefind = null;
-    let debounceTimeout; // Variável para o Debounce
+    let pagefindInstance = null;
+    let debounceTimeout;
 
-    // Esconde os resultados se clicar fora da barra de busca
+    // Esconde os resultados se clicar fora
     document.addEventListener('click', (e) => {
       if (!input.contains(e.target) && !resultsContainer.contains(e.target)) {
          resultsContainer.style.display = 'none';
       }
     });
 
-    // Mostra os resultados de volta se clicar no input e ele tiver texto
     input.addEventListener('focus', () => {
       if (input.value.trim() !== '') {
         resultsContainer.style.display = 'block';
@@ -47,10 +46,8 @@
     });
 
     input.addEventListener('input', (e) => {
-      // Limpa o timer anterior se o usuário continuar digitando
       clearTimeout(debounceTimeout);
       
-      // Aguarda 300ms após o usuário parar de digitar para buscar
       debounceTimeout = setTimeout(async () => {
         const target = e.target;
         const query = target ? target.value : '';
@@ -61,21 +58,36 @@
           return;
         }
 
-        if (!pagefind) {
+        // Carrega o Pagefind via tag <script> para fugir totalmente do Vite
+        if (!pagefindInstance) {
           try {
-            // Monta a URL dinamicamente para o Vite ignorar 100% e usar o import nativo
-            const pfPath = '/pagefind/pagefind.js';
-            pagefind = await import(/* @vite-ignore */ window.location.origin + pfPath);
-            await pagefind.init();
+            pagefindInstance = await new Promise((resolve, reject) => {
+              // Se já existir na página, aproveita
+              if (window.pagefind) {
+                resolve(window.pagefind);
+                return;
+              }
+              const script = document.createElement('script');
+              script.src = '/pagefind/pagefind.js';
+              script.onload = async () => {
+                await window.pagefind.init();
+                resolve(window.pagefind);
+              };
+              script.onerror = (err) => reject(err);
+              document.head.appendChild(script);
+            });
           } catch (err) {
             console.error("Erro ao carregar o Pagefind:", err);
+            resultsContainer.innerHTML = '<p class="no-results">Erro ao carregar a busca.</p>';
+            resultsContainer.style.display = 'block';
             return;
           }
         }
-        const search = await pagefind.search(query);
+
+        const search = await pagefindInstance.search(query);
         const results = await Promise.all(search.results.map((r) => r.data()));
 
-        resultsContainer.style.display = 'block'; // Mostra a caixa
+        resultsContainer.style.display = 'block';
         resultsContainer.innerHTML = results.length > 0 
           ? results.map(page => `
               <div class="result-item">
@@ -86,7 +98,7 @@
               </div>
             `).join('')
           : '<p class="no-results">Nenhum resultado encontrado.</p>';
-      }, 300); // Tempo do Debounce
+      }, 300);
     });
   }
 </script>
