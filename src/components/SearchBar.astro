@@ -22,15 +22,15 @@
 <div id="search-results" class="results-container"></div>
 
 <script>
-  // No Astro, o script já roda no momento certo. Não precisamos do 'DOMContentLoaded'.
-  const input = document.getElementById('search-input') as HTMLInputElement;
+  const input = document.getElementById('search-input');
   const resultsContainer = document.getElementById('search-results');
 
   if (input && resultsContainer) {
     let pagefind: any = null;
 
     input.addEventListener('input', async (e) => {
-      const query = (e.target as HTMLInputElement).value;
+      const target = e.target as HTMLInputElement;
+      const query = target ? target.value : '';
 
       if (!query.trim()) {
         resultsContainer.innerHTML = '';
@@ -63,7 +63,6 @@
     });
   }
 </script>
-
 <style>
   .search-container {
     display: flex;
