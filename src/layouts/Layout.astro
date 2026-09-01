@@ -7,7 +7,8 @@ import Footer from '../components/footer.astro';
 <html lang="pt-BR">
 	<head>
 		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<!-- Garante o zoom inicial correto e escala para o dispositivo -->
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<title>Coliseu Retrô</title>
 	</head>
@@ -18,30 +19,40 @@ import Footer from '../components/footer.astro';
 	</body>
 </html>
 
-<style>
-  /* COLE O SEU CSS AQUI DENTRO DA TAG STYLE */
-{
-  box-sizing: border-box;
-}
-  :root {
-    --bg-dark: #0a0b10;       
-    --purple-accent: #6b21a8;  
-    --cyan-neon: #06b6d4;     
-    --text-main: #f3f4f6;     
-  }
-
-  body {
-    background-color: var(--bg-dark);
-    color: var(--text-main);
-    font-family: 'Inter', sans-serif, system-ui;
+<style is:global>
+  /* --- Reset e Normalização Total --- */
+  /* Aplica o box-sizing universalmente */
+  *, *::before, *::after {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
   }
+  
+  :root {
+    --bg-dark: #0a0b10;        
+    --purple-accent: #6b21a8;  
+    --cyan-neon: #06b6d4;      
+    --text-main: #f3f4f6;      
+    /* Adicionei fontes de fallback mais seguras */
+    --font-primary: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
 
+  /* Força o html e body a ocuparem exatamente a tela e impede overflow */
+  html, body {
+    width: 100%;
+    min-height: 100vh;
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    font-family: var(--font-primary);
+    overflow-x: hidden; /* Evita que elementos saiam pela direita */
+  }
+
+  /* Estilos globais para links e botões */
   a {
     color: var(--cyan-neon);
     text-decoration: none;
     transition: opacity 0.2s;
+    display: inline-block; /* Ajuda no dimensionamento */
   }
 
   a:hover {
@@ -52,27 +63,11 @@ import Footer from '../components/footer.astro';
     background-color: var(--purple-accent);
     color: var(--text-main);
     border: 2px solid var(--cyan-neon);
-    padding: 10px 20px;
+    padding: 12px 24px; /* Ajuste sutil no padding */
     font-weight: bold;
     border-radius: 4px;
     box-shadow: 0 0 10px rgba(6, 182, 212, 0.3);
-	
-  }
-  /* ... dentro do style existente ... */
-  h1 {
-    font-size: 3rem;
-    margin-bottom: 10px;
-    color: var(--cyan-neon);
-    text-shadow: 0 0 15px rgba(6, 182, 212, 0.4);
-    display: flex; /* Ajuda a alinhar o ícone */
-    align-items: center;
-    justify-content: center;
-    gap: 15px;
-  }
-
-  .pixel-icon {
-    color: var(--purple-accent); /* Cor púrpura para o detalhe */
-    font-family: monospace; /* Garante que fique quadrado */
-    font-weight: bold;
+    font-family: inherit;
+    cursor: pointer;
   }
 </style>
