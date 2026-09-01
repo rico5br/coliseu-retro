@@ -51,46 +51,22 @@
       clearTimeout(debounceTimeout);
 
       debounceTimeout = setTimeout(async () => {
-        const query = e.target.value;
+        const query = e.target.value.trim();
 
-        if (!query.trim()) {
+        if (!query) {
           resultsContainer.innerHTML = '';
           resultsContainer.style.display = 'none';
           return;
         }
 
         try {
+          // Carrega o Pagefind somente no navegador.
+          // @vite-ignore impede o Astro/Vite de tentar
+          // resolver esse arquivo durante a build.
           if (!pagefindInstance) {
-            pagefindInstance = await new Promise((resolve, reject) => {
-              // Já carregado anteriormente
-              if (window.pagefind) {
-                resolve(window.pagefind);
-                return;
-              }
-
-              const script = document.createElement('script');
-
-              script.src = '/pagefind/pagefind.js';
-              script.onload = () => {
-                if (window.pagefind) {
-                  resolve(window.pagefind);
-                } else {
-                  reject(
-                    new Error('Pagefind carregou, mas não criou window.pagefind.')
-                  );
-                }
-              };
-
-              script.onerror = () => {
-                reject(
-                  new Error(
-                    'Falha ao carregar /pagefind/pagefind.js.'
-                  )
-                );
-              };
-
-              document.head.appendChild(script);
-            });
+            pagefindInstance = await import(
+              /* @vite-ignore */ '/pagefind/pagefind.js'
+            );
           }
 
           const search = await pagefindInstance.search(query);
@@ -101,26 +77,27 @@
 
           resultsContainer.style.display = 'block';
 
-          if (results.length > 0) {
-            resultsContainer.innerHTML = results
-              .map(
-                (page) => `
-                  <div class="result-item">
-                    <a href="${page.url}">
-                      <h4>${page.meta.title || 'Página'}</h4>
-                      <p>${page.excerpt || ''}</p>
-                    </a>
-                  </div>
-                `
-              )
-              .join('');
-          } else {
+          if (results.length === 0) {
             resultsContainer.innerHTML =
               '<p class="no-results">Nenhum resultado encontrado.</p>';
+            return;
           }
 
+          resultsContainer.innerHTML = results
+            .map(
+              (page) => `
+                <div class="result-item">
+                  <a href="${page.url}">
+                    <h4>${page.meta.title || 'Página'}</h4>
+                    <p>${page.excerpt || ''}</p>
+                  </a>
+                </div>
+              `
+            )
+            .join('');
+
         } catch (err) {
-          console.error('Detalhe do erro do Pagefind:', err);
+          console.error('Erro do Pagefind:', err);
 
           resultsContainer.innerHTML = `
             <p class="no-results" style="color: #ff6b6b; font-size: 0.8rem;">
