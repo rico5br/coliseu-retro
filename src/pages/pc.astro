@@ -1,0 +1,16 @@
+---
+import Layout from "../layouts/Layout.astro";
+import PlatformPage from "../components/PlatformPage.astro";
+
+const games = [];
+---
+
+<Layout title="PC - Coliseu Retrô">
+
+  <PlatformPage
+    title="PC"
+    description="Jogos clássicos, guias e conteúdos para PC."
+    games={games}
+  />
+
+</Layout>

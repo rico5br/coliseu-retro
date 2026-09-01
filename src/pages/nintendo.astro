@@ -1,0 +1,16 @@
+---
+import Layout from "../layouts/Layout.astro";
+import PlatformPage from "../components/PlatformPage.astro";
+
+const games = [];
+---
+
+<Layout title="Nintendo - Coliseu Retrô">
+
+  <PlatformPage
+    title="Nintendo"
+    description="Detonados, jogos e conteúdos clássicos da Nintendo."
+    games={games}
+  />
+
+</Layout>

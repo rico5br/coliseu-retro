@@ -1,0 +1,22 @@
+---
+import Layout from "../layouts/Layout.astro";
+import PlatformPage from "../components/PlatformPage.astro";
+
+const games = [
+  {
+    title: "Detonado de Chrono Cross",
+    description: "Guia completo passo a passo do clássico do PlayStation.",
+    href: "/detonados/chrono-cross/",
+  },
+];
+---
+
+<Layout title="PlayStation - Coliseu Retrô">
+
+  <PlatformPage
+    title="PlayStation"
+    description="Detonados, jogos e conteúdos clássicos do PlayStation."
+    games={games}
+  />
+
+</Layout>
