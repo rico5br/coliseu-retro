@@ -26,10 +26,10 @@
   const resultsContainer = document.getElementById('search-results');
 
   if (input && resultsContainer) {
-    let pagefind: any = null;
+    let pagefind = null;
 
     input.addEventListener('input', async (e) => {
-      const target = e.target as HTMLInputElement;
+      const target = e.target;
       const query = target ? target.value : '';
 
       if (!query.trim()) {
@@ -48,7 +48,7 @@
       }
 
       const search = await pagefind.search(query);
-      const results = await Promise.all(search.results.map((r: any) => r.data()));
+      const results = await Promise.all(search.results.map((r) => r.data()));
 
       resultsContainer.innerHTML = results.length > 0 
         ? results.map(page => `
