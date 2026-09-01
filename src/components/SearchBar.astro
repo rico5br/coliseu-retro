@@ -1,0 +1,69 @@
+---
+// src/components/SearchBar.astro
+---
+
+<div class="search-container">
+  <input 
+    type="text" 
+    id="search-input" 
+    placeholder="Buscar" 
+    class="neon-search"
+  />
+  <!-- Ícone de lupa opcional (SVG simples) -->
+  <button class="search-btn" aria-label="Buscar">
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="11" cy="11" r="8"></circle>
+      <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+    </svg>
+  </button>
+</div>
+
+<style>
+  .search-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+
+  .neon-search {
+    width: 100%;
+    padding: 12px 20px;
+    padding-right: 45px; /* Espaço para a lupa */
+    background-color: transparent;
+    border: 2px solid #8b5cf6; /* Roxo combinando com o botão antigo */
+    border-radius: 8px;
+    color: #ffffff;
+    font-size: 1rem;
+    outline: none;
+    transition: all 0.3s ease;
+    /* Efeito de brilho neon */
+    box-shadow: 0 0 10px rgba(139, 92, 246, 0.4), inset 0 0 5px rgba(139, 92, 246, 0.2);
+  }
+
+  /* Quando o usuário clica na barra, muda para o ciano do logo */
+  .neon-search:focus {
+    border-color: #00ffff;
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.5), inset 0 0 8px rgba(0, 255, 255, 0.3);
+  }
+
+  .neon-search::placeholder {
+    color: #a1a1aa;
+  }
+
+  .search-btn {
+    position: absolute;
+    right: 12px;
+    background: none;
+    border: none;
+    color: #8b5cf6;
+    cursor: pointer;
+    transition: color 0.3s ease;
+  }
+
+  .neon-search:focus + .search-btn {
+    color: #00ffff;
+  }
+</style>
