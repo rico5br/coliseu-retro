@@ -63,7 +63,7 @@
 
         if (!pagefind) {
           try {
-            pagefind = await import('/pagefind/pagefind.js');
+           pagefind = await import(/* @vite-ignore */ '/pagefind/pagefind.js');
             await pagefind.init();
           } catch (err) {
             console.error("Erro ao carregar o Pagefind:", err);
