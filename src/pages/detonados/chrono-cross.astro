@@ -25,16 +25,27 @@ const paginas = Array.from({ length: 46 }, (_, i) => i + 1);
     </header>
 
 
-    <section class="detonado" data-pagefind-body>
+    <section class="detonado">
 
-      {paginas.map((pagina) => (
-        <img
-          src={`/imagens/chrono-cross/${pagina}.jpg`}
-          alt={`Página ${pagina} do detonado de Chrono Cross`}
-        />
-      ))}
+  <div data-pagefind-body>
 
-    </section>
+    <h2>Detonado de Chrono Cross</h2>
+
+    <p>
+      Detonado completo de Chrono Cross para PlayStation.
+      Guia passo a passo do clássico.
+    </p>
+
+    {paginas.map((pagina) => (
+      <img
+        src={`/imagens/chrono-cross/${pagina}.jpg`}
+        alt={`Página ${pagina} do detonado de Chrono Cross`}
+      />
+    ))}
+
+  </div>
+
+</section>
 
 
     <div class="final">
