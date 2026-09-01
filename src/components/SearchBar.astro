@@ -2,117 +2,223 @@
 // src/components/SearchBar.astro
 ---
 
-<!-- Wrapper adicionado para manter o menu flutuante ancorado à barra -->
 <div class="search-wrapper">
   <div class="search-container">
-    <input 
-      type="text" 
-      id="search-input" 
-      placeholder="Buscar" 
+    <input
+      type="text"
+      id="search-input"
+      placeholder="Buscar no Coliseu Retro..."
       class="neon-search"
       autocomplete="off"
+      aria-label="Pesquisar no site"
     />
-    <button class="search-btn" aria-label="Buscar">
-      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+
+    <button class="search-btn" aria-label="Buscar" type="button">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
         <circle cx="11" cy="11" r="8"></circle>
         <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
       </svg>
     </button>
   </div>
 
-  <!-- Caixa flutuante -->
+  <!-- Resultados da pesquisa -->
   <div id="search-results" class="results-container"></div>
 </div>
 
 <script src="/search.js" is:inline></script>
+
 <style>
-  /* Novo Wrapper para organizar os elementos absolutos */
+  /* =========================
+     ÁREA DA BUSCA
+     ========================= */
+
   .search-wrapper {
     position: relative;
-    max-width: 400px;
+    width: 100%;
+    max-width: 420px;
     margin: 0 auto;
+    z-index: 1000;
   }
 
   .search-container {
+    position: relative;
     display: flex;
     align-items: center;
-    justify-content: center;
-    position: relative;
     width: 100%;
   }
 
   .neon-search {
+    box-sizing: border-box;
     width: 100%;
-    padding: 12px 20px;
-    padding-right: 45px;
-    background-color: transparent;
+    height: 46px;
+
+    padding: 0 48px 0 18px;
+
+    background: rgba(10, 11, 16, 0.95);
     border: 2px solid #6b21a8;
     border-radius: 8px;
+
     color: #ffffff;
-    font-size: 1rem;
+    font-size: 0.95rem;
+    font-family: inherit;
+
     outline: none;
-    transition: all 0.3s ease;
-    box-shadow: 0 0 10px rgba(107, 33, 168, 0.4), inset 0 0 5px rgba(107, 33, 168, 0.2);
+
+    transition:
+      border-color 0.25s ease,
+      box-shadow 0.25s ease;
+
+    box-shadow:
+      0 0 10px rgba(107, 33, 168, 0.35),
+      inset 0 0 5px rgba(107, 33, 168, 0.15);
+  }
+
+  .neon-search:hover {
+    border-color: #8b2fc9;
   }
 
   .neon-search:focus {
     border-color: #06b6d4;
-    box-shadow: 0 0 15px rgba(6, 182, 212, 0.5), inset 0 0 8px rgba(6, 182, 212, 0.3);
+
+    box-shadow:
+      0 0 15px rgba(6, 182, 212, 0.45),
+      inset 0 0 8px rgba(6, 182, 212, 0.2);
   }
 
   .neon-search::placeholder {
-    color: #9ca3af;
+    color: #6b7280;
+    opacity: 1;
   }
+
+  /* =========================
+     BOTÃO DA LUPA
+     ========================= */
 
   .search-btn {
     position: absolute;
-    right: 12px;
-    background: none;
+    top: 50%;
+    right: 10px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 30px;
+    height: 30px;
+
+    padding: 0;
+
+    transform: translateY(-50%);
+
+    background: transparent;
     border: none;
+
     color: #6b21a8;
     cursor: pointer;
-    transition: color 0.3s ease;
+
+    transition:
+      color 0.25s ease,
+      transform 0.25s ease;
+  }
+
+  .search-btn:hover {
+    color: #06b6d4;
+    transform: translateY(-50%) scale(1.08);
   }
 
   .neon-search:focus + .search-btn {
     color: #06b6d4;
   }
 
-  /* Melhorias na caixinha de resultados */
+  /* =========================
+     CAIXA DE RESULTADOS
+     ========================= */
+
   .results-container {
-    display: none; /* Escondido até haver resultados */
-    width: 100%;
-    margin-top: 10px;
-    text-align: left;
-    background: #0a0b10;
-    border: 1px solid #6b21a8;
-    border-radius: 8px;
+    display: none;
+
     position: absolute;
-    top: 100%; /* Gruda logo abaixo do input */
-    left: 0;
-    z-index: 100;
-    max-height: 350px; /* Limite de altura */
-    overflow-y: auto;  /* Scroll se tiver muitos itens */
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+    top: calc(100% + 10px);
+    left: 50%;
+
+    width: 520px;
+    max-width: 92vw;
+
+    transform: translateX(-50%);
+
+    box-sizing: border-box;
+
+    background: rgba(10, 11, 16, 0.98);
+
+    border: 1px solid #6b21a8;
+    border-radius: 10px;
+
+    overflow: hidden;
+    overflow-y: auto;
+
+    max-height: 320px;
+
+    text-align: left;
+
+    box-shadow:
+      0 10px 30px rgba(0, 0, 0, 0.65),
+      0 0 18px rgba(107, 33, 168, 0.2);
+
+    backdrop-filter: blur(8px);
+
+    scrollbar-width: thin;
+    scrollbar-color: #6b21a8 transparent;
   }
 
-  /* Personalização da barra de scroll para combinar com o Neon */
+  /* =========================
+     SCROLLBAR
+     ========================= */
+
   .results-container::-webkit-scrollbar {
     width: 6px;
   }
-  .results-container::-webkit-scrollbar-thumb {
-    background: #6b21a8;
-    border-radius: 3px;
+
+  .results-container::-webkit-scrollbar-track {
+    background: transparent;
   }
 
+  .results-container::-webkit-scrollbar-thumb {
+    background: #6b21a8;
+    border-radius: 10px;
+  }
+
+  .results-container::-webkit-scrollbar-thumb:hover {
+    background: #8b2fc9;
+  }
+
+  /* =========================
+     ITEM DE RESULTADO
+     ========================= */
+
   .result-item {
-    padding: 12px;
-    border-bottom: 1px solid rgba(107, 33, 168, 0.3);
-    transition: background 0.2s ease;
+    padding: 14px 16px;
+
+    border-bottom: 1px solid rgba(107, 33, 168, 0.25);
+
+    transition:
+      background 0.2s ease,
+      padding-left 0.2s ease;
   }
 
   .result-item:hover {
     background: rgba(107, 33, 168, 0.1);
+    padding-left: 19px;
   }
 
   .result-item:last-child {
@@ -120,28 +226,113 @@
   }
 
   .result-item a {
-    color: #06b6d4;
     display: block;
+
+    color: inherit;
     text-decoration: none;
   }
 
-  .result-item p {
-    color: #9ca3af;
-    font-size: 0.85rem;
-    margin-top: 4px;
-    line-height: 1.4;
+  /* =========================
+     TÍTULO
+     ========================= */
+
+  .result-item h4 {
+    margin: 0 0 6px;
+
+    color: #06b6d4;
+
+    font-size: 0.95rem;
+    font-weight: 700;
+
+    line-height: 1.35;
+
+    transition: color 0.2s ease;
   }
+
+  .result-item:hover h4 {
+    color: #22d3ee;
+  }
+
+  /* =========================
+     TRECHO DO RESULTADO
+     ========================= */
+
+  .result-item p {
+    margin: 0;
+
+    color: #9ca3af;
+
+    font-size: 0.82rem;
+    line-height: 1.45;
+
+    /* Limita o tamanho do texto */
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+
+    overflow: hidden;
+  }
+
+  /* =========================
+     TERMOS DESTACADOS
+     ========================= */
 
   .result-item mark {
-    background: transparent;
-    color: #ffffff;
-    font-weight: bold;
-    text-shadow: 0 0 5px #06b6d4;
+    padding: 1px 3px;
+
+    background: #fde047;
+    color: #111827;
+
+    border-radius: 2px;
+
+    font-weight: 700;
+    text-shadow: none;
   }
 
+  /* =========================
+     NENHUM RESULTADO / ERRO
+     ========================= */
+
   .no-results {
-    padding: 12px;
+    margin: 0;
+    padding: 18px;
+
     color: #9ca3af;
+
+    font-size: 0.85rem;
     text-align: center;
+  }
+
+  /* =========================
+     CELULAR
+     ========================= */
+
+  @media (max-width: 600px) {
+    .search-wrapper {
+      max-width: 100%;
+    }
+
+    .results-container {
+      width: 94vw;
+      max-height: 280px;
+    }
+
+    .neon-search {
+      height: 44px;
+      font-size: 0.9rem;
+    }
+
+    .result-item {
+      padding: 12px 14px;
+    }
+
+    .result-item h4 {
+      font-size: 0.9rem;
+    }
+
+    .result-item p {
+      font-size: 0.8rem;
+      -webkit-line-clamp: 2;
+    }
   }
 </style>
