@@ -32,7 +32,6 @@
     let pagefindInstance = null;
     let debounceTimeout;
 
-    // Fecha os resultados ao clicar fora
     document.addEventListener('click', (e) => {
       if (
         !input.contains(e.target) &&
@@ -42,7 +41,6 @@
       }
     });
 
-    // Mostra novamente os resultados ao focar no input
     input.addEventListener('focus', () => {
       if (input.value.trim() !== '') {
         resultsContainer.style.display = 'block';
@@ -55,7 +53,6 @@
       debounceTimeout = setTimeout(async () => {
         const query = e.target.value;
 
-        // Se estiver vazio, esconde os resultados
         if (!query.trim()) {
           resultsContainer.innerHTML = '';
           resultsContainer.style.display = 'none';
@@ -63,15 +60,41 @@
         }
 
         try {
-          // Carrega o Pagefind apenas na primeira busca
           if (!pagefindInstance) {
-            pagefindInstance = await import('/pagefind/pagefind.js');
+            pagefindInstance = await new Promise((resolve, reject) => {
+              // Já carregado anteriormente
+              if (window.pagefind) {
+                resolve(window.pagefind);
+                return;
+              }
+
+              const script = document.createElement('script');
+
+              script.src = '/pagefind/pagefind.js';
+              script.onload = () => {
+                if (window.pagefind) {
+                  resolve(window.pagefind);
+                } else {
+                  reject(
+                    new Error('Pagefind carregou, mas não criou window.pagefind.')
+                  );
+                }
+              };
+
+              script.onerror = () => {
+                reject(
+                  new Error(
+                    'Falha ao carregar /pagefind/pagefind.js.'
+                  )
+                );
+              };
+
+              document.head.appendChild(script);
+            });
           }
 
-          // Faz a busca
           const search = await pagefindInstance.search(query);
 
-          // Obtém os dados completos dos resultados
           const results = await Promise.all(
             search.results.map((result) => result.data())
           );
@@ -80,14 +103,16 @@
 
           if (results.length > 0) {
             resultsContainer.innerHTML = results
-              .map((page) => `
-                <div class="result-item">
-                  <a href="${page.url}">
-                    <h4>${page.meta.title || 'Página'}</h4>
-                    <p>${page.excerpt}</p>
-                  </a>
-                </div>
-              `)
+              .map(
+                (page) => `
+                  <div class="result-item">
+                    <a href="${page.url}">
+                      <h4>${page.meta.title || 'Página'}</h4>
+                      <p>${page.excerpt || ''}</p>
+                    </a>
+                  </div>
+                `
+              )
               .join('');
           } else {
             resultsContainer.innerHTML =
@@ -105,12 +130,10 @@
 
           resultsContainer.style.display = 'block';
         }
-
       }, 300);
     });
   }
 </script>
-
 <style>
   /* Novo Wrapper para organizar os elementos absolutos */
   .search-wrapper {
