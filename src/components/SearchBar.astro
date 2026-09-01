@@ -18,6 +18,57 @@
   </button>
 </div>
 
+<!-- Caixa flutuante onde os resultados da busca vão aparecer -->
+<div id="search-results" class="results-container"></div>
+
+<script>
+  // Script que ativa o Pagefind no navegador
+  window.addEventListener('DOMContentLoaded', () => {
+    const input = document.getElementById('search-input') as HTMLInputElement;
+    const resultsContainer = document.getElementById('search-results');
+
+    if (input && resultsContainer) {
+      // Carrega o índice do Pagefind gerado no build
+      let pagefind: any = null;
+
+      input.addEventListener('input', async (e) => {
+        const query = (e.target as HTMLInputElement).value;
+
+        if (!query.trim()) {
+          resultsContainer.innerHTML = '';
+          return;
+        }
+
+        if (!pagefind) {
+          try {
+            // Importa dinamicamente o pagefind gerado na pasta dist/public
+            pagefind = await import('/pagefind/pagefind.js');
+            await pagefind.init();
+          } catch (err) {
+            console.error("Erro ao carregar o Pagefind:", err);
+            return;
+          }
+        }
+
+        const search = await pagefind.search(query);
+        const results = await Promise.all(search.results.map((r: any) => r.data()));
+
+        // Renderiza os resultados encontrados
+        resultsContainer.innerHTML = results.length > 0 
+          ? results.map(page => `
+              <div class="result-item">
+                <a href="${page.url}">
+                  <h4>${page.meta.title || 'Página'}</h4>
+                  <p>${page.excerpt}</p>
+                </a>
+              </div>
+            `).join('')
+          : '<p class="no-results">Nenhum resultado encontrado.</p>';
+      });
+    }
+  });
+</script>
+
 <style>
   .search-container {
     display: flex;
@@ -31,26 +82,24 @@
   .neon-search {
     width: 100%;
     padding: 12px 20px;
-    padding-right: 45px; /* Espaço para a lupa */
+    padding-right: 45px;
     background-color: transparent;
-    border: 2px solid #8b5cf6; /* Roxo combinando com o botão antigo */
+    border: 2px solid #6b21a8;
     border-radius: 8px;
     color: #ffffff;
     font-size: 1rem;
     outline: none;
     transition: all 0.3s ease;
-    /* Efeito de brilho neon */
-    box-shadow: 0 0 10px rgba(139, 92, 246, 0.4), inset 0 0 5px rgba(139, 92, 246, 0.2);
+    box-shadow: 0 0 10px rgba(107, 33, 168, 0.4), inset 0 0 5px rgba(107, 33, 168, 0.2);
   }
 
-  /* Quando o usuário clica na barra, muda para o ciano do logo */
   .neon-search:focus {
-    border-color: #00ffff;
-    box-shadow: 0 0 15px rgba(0, 255, 255, 0.5), inset 0 0 8px rgba(0, 255, 255, 0.3);
+    border-color: #06b6d4;
+    box-shadow: 0 0 15px rgba(6, 182, 212, 0.5), inset 0 0 8px rgba(6, 182, 212, 0.3);
   }
 
   .neon-search::placeholder {
-    color: #a1a1aa;
+    color: #9ca3af;
   }
 
   .search-btn {
@@ -58,12 +107,53 @@
     right: 12px;
     background: none;
     border: none;
-    color: #8b5cf6;
+    color: #6b21a8;
     cursor: pointer;
     transition: color 0.3s ease;
   }
 
   .neon-search:focus + .search-btn {
-    color: #00ffff;
+    color: #06b6d4;
+  }
+
+  /* Estilos para a caixinha de resultados */
+  .results-container {
+    max-width: 400px;
+    margin: 10px auto 0 auto;
+    text-align: left;
+    background: #0a0b10;
+    border: 1px solid #6b21a8;
+    border-radius: 8px;
+    overflow: hidden;
+    position: absolute;
+    left: 0;
+    right: 0;
+    z-index: 100;
+  }
+
+  .result-item {
+    padding: 12px;
+    border-bottom: 1px solid rgba(107, 33, 168, 0.3);
+  }
+
+  .result-item:last-child {
+    border-bottom: none;
+  }
+
+  .result-item a {
+    color: #06b6d4;
+    display: block;
+  }
+
+  .result-item p {
+    color: #9ca3af;
+    font-size: 0.85rem;
+    margin-top: 4px;
+  }
+
+  .no-results {
+    padding: 12px;
+    color: #9ca3af;
+    text-align: center;
   }
 </style>
