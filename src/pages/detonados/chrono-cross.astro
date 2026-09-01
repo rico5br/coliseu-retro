@@ -8,24 +8,24 @@ const paginas = Array.from({ length: 46 }, (_, i) => i + 1);
 
   <main>
 
-<header class="cabecalho">
+    <header class="cabecalho">
 
-  <a href="/" class="logo-link">
-    <img src="/logo.png" alt="Coliseu Retrô" class="logo" />
-  </a>
+      <a href="/" class="logo-link">
+        <img src="/logo.png" alt="Coliseu Retrô" class="logo" />
+      </a>
 
-  <h1>Detonado de Chrono Cross</h1>
+      <h1>Detonado de Chrono Cross</h1>
 
-  <p>
-    Detonado completo de Chrono Cross para PlayStation.
-  </p>
+      <p>
+        Detonado completo de Chrono Cross para PlayStation.
+      </p>
 
-  <a href="/" class="voltar">← Voltar para a página inicial</a>
+      <a href="/" class="voltar">← Voltar para a página inicial</a>
 
-</header>
+    </header>
 
 
-    <section class="detonado">
+    <section class="detonado" data-pagefind-body>
 
       {paginas.map((pagina) => (
         <img
@@ -35,10 +35,12 @@ const paginas = Array.from({ length: 46 }, (_, i) => i + 1);
       ))}
 
     </section>
-<div class="final">
-  <p>— Fim do Detonado —</p>
-  <a href="/" class="voltar">← Voltar para a página inicial</a>
-</div>
+
+
+    <div class="final">
+      <p>— Fim do Detonado —</p>
+      <a href="/" class="voltar">← Voltar para a página inicial</a>
+    </div>
 
   </main>
 
@@ -53,25 +55,18 @@ const paginas = Array.from({ length: 46 }, (_, i) => i + 1);
     padding: 60px 20px;
   }
 
-
   .cabecalho {
     text-align: center;
     margin-bottom: 50px;
   }
 
-
-
-
-
   h1 {
     color: #00eaff;
   }
 
-
   p {
     color: #aaa;
   }
-
 
   .detonado img {
     display: block;
@@ -80,35 +75,38 @@ const paginas = Array.from({ length: 46 }, (_, i) => i + 1);
     height: auto;
     margin: 0 auto 30px;
   }
-.logo-link {
-  display: inline-block;
-  margin-bottom: 20px;
-}
 
-.logo {
-  width: 299px;
-  height: auto;
-  display: block;
-  transition: transform 0.2s ease;
-}
+  .logo-link {
+    display: inline-block;
+    margin-bottom: 20px;
+  }
 
-.logo-link:hover .logo {
-  transform: scale(1.05);
-}
+  .logo {
+    width: 299px;
+    height: auto;
+    display: block;
+    transition: transform 0.2s ease;
+  }
 
-.voltar {
-  display: inline-block;
-  margin-top: 25px;
-  color: #00eaff;
-  text-decoration: none;
-}
+  .logo-link:hover .logo {
+    transform: scale(1.05);
+  }
 
-.voltar:hover {
-  color: #ff00ff;
-  text-decoration: underline;
-}
-.final {
-  text-align: center;
-  padding: 20px 0 40px;
-}
+  .voltar {
+    display: inline-block;
+    margin-top: 25px;
+    color: #00eaff;
+    text-decoration: none;
+  }
+
+  .voltar:hover {
+    color: #ff00ff;
+    text-decoration: underline;
+  }
+
+  .final {
+    text-align: center;
+    padding: 20px 0 40px;
+  }
+
 </style>
