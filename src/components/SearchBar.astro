@@ -2,24 +2,27 @@
 // src/components/SearchBar.astro
 ---
 
-<div class="search-container">
-  <input 
-    type="text" 
-    id="search-input" 
-    placeholder="Buscar" 
-    class="neon-search"
-  />
-  <!-- Ícone de lupa opcional (SVG simples) -->
-  <button class="search-btn" aria-label="Buscar">
-    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <circle cx="11" cy="11" r="8"></circle>
-      <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-    </svg>
-  </button>
-</div>
+<!-- Wrapper adicionado para manter o menu flutuante ancorado à barra -->
+<div class="search-wrapper">
+  <div class="search-container">
+    <input 
+      type="text" 
+      id="search-input" 
+      placeholder="Buscar" 
+      class="neon-search"
+      autocomplete="off"
+    />
+    <button class="search-btn" aria-label="Buscar">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"></circle>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+      </svg>
+    </button>
+  </div>
 
-<!-- Caixa flutuante onde os resultados da busca vão aparecer -->
-<div id="search-results" class="results-container"></div>
+  <!-- Caixa flutuante -->
+  <div id="search-results" class="results-container"></div>
+</div>
 
 <script>
   const input = document.getElementById('search-input');
@@ -27,50 +30,80 @@
 
   if (input && resultsContainer) {
     let pagefind = null;
+    let debounceTimeout; // Variável para o Debounce
 
-    input.addEventListener('input', async (e) => {
-      const target = e.target;
-      const query = target ? target.value : '';
-
-      if (!query.trim()) {
-        resultsContainer.innerHTML = '';
-        return;
+    // Esconde os resultados se clicar fora da barra de busca
+    document.addEventListener('click', (e) => {
+      if (!input.contains(e.target) && !resultsContainer.contains(e.target)) {
+         resultsContainer.style.display = 'none';
       }
+    });
 
-      if (!pagefind) {
-        try {
-          pagefind = await import('/pagefind/pagefind.js');
-          await pagefind.init();
-        } catch (err) {
-          console.error("Erro ao carregar o Pagefind:", err);
+    // Mostra os resultados de volta se clicar no input e ele tiver texto
+    input.addEventListener('focus', () => {
+      if (input.value.trim() !== '') {
+        resultsContainer.style.display = 'block';
+      }
+    });
+
+    input.addEventListener('input', (e) => {
+      // Limpa o timer anterior se o usuário continuar digitando
+      clearTimeout(debounceTimeout);
+      
+      // Aguarda 300ms após o usuário parar de digitar para buscar
+      debounceTimeout = setTimeout(async () => {
+        const target = e.target;
+        const query = target ? target.value : '';
+
+        if (!query.trim()) {
+          resultsContainer.innerHTML = '';
+          resultsContainer.style.display = 'none';
           return;
         }
-      }
 
-      const search = await pagefind.search(query);
-      const results = await Promise.all(search.results.map((r) => r.data()));
+        if (!pagefind) {
+          try {
+            pagefind = await import('/pagefind/pagefind.js');
+            await pagefind.init();
+          } catch (err) {
+            console.error("Erro ao carregar o Pagefind:", err);
+            return;
+          }
+        }
 
-      resultsContainer.innerHTML = results.length > 0 
-        ? results.map(page => `
-            <div class="result-item">
-              <a href="${page.url}">
-                <h4>${page.meta.title || 'Página'}</h4>
-                <p>${page.excerpt}</p>
-              </a>
-            </div>
-          `).join('')
-        : '<p class="no-results">Nenhum resultado encontrado.</p>';
+        const search = await pagefind.search(query);
+        const results = await Promise.all(search.results.map((r) => r.data()));
+
+        resultsContainer.style.display = 'block'; // Mostra a caixa
+        resultsContainer.innerHTML = results.length > 0 
+          ? results.map(page => `
+              <div class="result-item">
+                <a href="${page.url}">
+                  <h4>${page.meta.title || 'Página'}</h4>
+                  <p>${page.excerpt}</p>
+                </a>
+              </div>
+            `).join('')
+          : '<p class="no-results">Nenhum resultado encontrado.</p>';
+      }, 300); // Tempo do Debounce
     });
   }
 </script>
+
 <style>
+  /* Novo Wrapper para organizar os elementos absolutos */
+  .search-wrapper {
+    position: relative;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+
   .search-container {
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
-    max-width: 400px;
-    margin: 0 auto;
+    width: 100%;
   }
 
   .neon-search {
@@ -110,24 +143,41 @@
     color: #06b6d4;
   }
 
-  /* Estilos para a caixinha de resultados */
+  /* Melhorias na caixinha de resultados */
   .results-container {
-    max-width: 400px;
-    margin: 10px auto 0 auto;
+    display: none; /* Escondido até haver resultados */
+    width: 100%;
+    margin-top: 10px;
     text-align: left;
     background: #0a0b10;
     border: 1px solid #6b21a8;
     border-radius: 8px;
-    overflow: hidden;
     position: absolute;
+    top: 100%; /* Gruda logo abaixo do input */
     left: 0;
-    right: 0;
     z-index: 100;
+    max-height: 350px; /* Limite de altura */
+    overflow-y: auto;  /* Scroll se tiver muitos itens */
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+  }
+
+  /* Personalização da barra de scroll para combinar com o Neon */
+  .results-container::-webkit-scrollbar {
+    width: 6px;
+  }
+  .results-container::-webkit-scrollbar-thumb {
+    background: #6b21a8;
+    border-radius: 3px;
   }
 
   .result-item {
     padding: 12px;
     border-bottom: 1px solid rgba(107, 33, 168, 0.3);
+    transition: background 0.2s ease;
+  }
+
+  .result-item:hover {
+    background: rgba(107, 33, 168, 0.1);
   }
 
   .result-item:last-child {
@@ -137,12 +187,21 @@
   .result-item a {
     color: #06b6d4;
     display: block;
+    text-decoration: none;
   }
 
   .result-item p {
     color: #9ca3af;
     font-size: 0.85rem;
     margin-top: 4px;
+    line-height: 1.4;
+  }
+
+  .result-item mark {
+    background: transparent;
+    color: #ffffff;
+    font-weight: bold;
+    text-shadow: 0 0 5px #06b6d4;
   }
 
   .no-results {
