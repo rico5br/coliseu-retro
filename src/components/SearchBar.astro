@@ -32,7 +32,6 @@
     let pagefindInstance = null;
     let debounceTimeout;
 
-    // Esconde os resultados se clicar fora
     document.addEventListener('click', (e) => {
       if (!input.contains(e.target) && !resultsContainer.contains(e.target)) {
          resultsContainer.style.display = 'none';
@@ -58,11 +57,9 @@
           return;
         }
 
-        // Carrega o Pagefind via tag <script> para fugir totalmente do Vite
         if (!pagefindInstance) {
           try {
             pagefindInstance = await new Promise((resolve, reject) => {
-              // Se já existir na página, aproveita
               if (window.pagefind) {
                 resolve(window.pagefind);
                 return;
@@ -70,15 +67,19 @@
               const script = document.createElement('script');
               script.src = '/pagefind/pagefind.js';
               script.onload = async () => {
-                await window.pagefind.init();
-                resolve(window.pagefind);
+                try {
+                  await window.pagefind.init();
+                  resolve(window.pagefind);
+                } catch (initErr) {
+                  reject(initErr);
+                }
               };
-              script.onerror = (err) => reject(err);
+              script.onerror = () => reject(new Error("Falha ao baixar /pagefind/pagefind.js (Arquivo não encontrado no servidor)."));
               document.head.appendChild(script);
             });
           } catch (err) {
-            console.error("Erro ao carregar o Pagefind:", err);
-            resultsContainer.innerHTML = '<p class="no-results">Erro ao carregar a busca.</p>';
+            console.error("Detalhe do erro do Pagefind:", err);
+            resultsContainer.innerHTML = `<p class="no-results" style="color: #ff6b6b; font-size: 0.8rem;">Erro: ${err.message}</p>`;
             resultsContainer.style.display = 'block';
             return;
           }
