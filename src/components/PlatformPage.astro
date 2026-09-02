@@ -18,12 +18,21 @@ const { title, description, games } = Astro.props;
 <main class="platform-page">
 
   <header class="platform-header">
-    <a href="/" class="back-link">← Voltar para a página inicial</a>
 
-    <h1>{title}</h1>
+  <a href="/" class="platform-logo">
+    <img
+      src="/logo.png"
+      alt="Coliseu Retrô"
+    />
+  </a>
 
-    <p>{description}</p>
-  </header>
+  <a href="/" class="back-link">← Voltar para a página inicial</a>
+
+  <h1>{title}</h1>
+
+  <p>{description}</p>
+
+</header>
 
   <section class="games-section" data-pagefind-ignore>
     <h2>Jogos</h2>
@@ -77,6 +86,21 @@ const { title, description, games } = Astro.props;
     text-align: center;
     margin-bottom: 50px;
   }
+.platform-logo {
+  display: inline-block;
+  margin-bottom: 20px;
+}
+
+.platform-logo img {
+  width: 180px;
+  height: auto;
+  display: block;
+  transition: transform 0.2s ease;
+}
+
+.platform-logo:hover img {
+  transform: scale(1.04);
+}
 
   .back-link {
     display: inline-block;
