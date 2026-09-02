@@ -53,17 +53,21 @@ if (input && resultsContainer) {
         }
 
         resultsContainer.innerHTML = results
-          .map(
-            (page) => `
-              <div class="result-item">
-                <a href="${page.url}">
-                  <h4>${page.meta.title || 'Página'}</h4>
-                  <p>${page.excerpt || ''}</p>
-                </a>
-              </div>
-            `
-          )
-          .join('');
+  .map((page) => {
+    const excerpt = (page.excerpt || '')
+      .replace(/←\s*Voltar para a página inicial/gi, '')
+      .trim();
+
+    return `
+      <div class="result-item">
+        <a href="${page.url}">
+          <h4>${page.meta.title || 'Página'}</h4>
+          <p>${excerpt}</p>
+        </a>
+      </div>
+    `;
+  })
+  .join('');
       } catch (err) {
         console.error('Erro do Pagefind:', err);
 
