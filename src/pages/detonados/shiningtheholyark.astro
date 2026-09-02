@@ -1,0 +1,127 @@
+---
+import Layout from "../../layouts/Layout.astro";
+
+const paginas = Array.from({ length: 9 }, (_, i) => i + 1);
+---
+
+<Layout title="Detonado de Shining the Holy Ark">
+
+  <main>
+
+    <header class="cabecalho">
+
+      <a href="/" class="logo-link">
+        <img src="/logo.png" alt="Coliseu Retrô" class="logo" />
+      </a>
+      <a href="/" class="voltar">← Voltar para a página inicial</a>
+
+      <h1>Detonado de Shining the Holy Ark</h1>
+
+      <p>
+        Detonado completo de Shining the Holy Ark para Sega Saturn.
+      </p>
+
+    
+
+    </header>
+
+
+    <section class="detonado">
+
+  <div data-pagefind-body>
+
+    <h2>Detonado de Shining the Holy Ark</h2>
+
+    <p>
+      Detonado completo de Shining the Holy Ark para Sega Saturn.
+      Guia do clássico RPG do Sega Saturn.
+    </p>
+
+    {paginas.map((pagina) => (
+      <img
+        src={`/imagens/shiningtheholyark/${pagina}.jpg`}
+        alt={`Página ${pagina} do detonado de Shining the Holy Ark`}
+      />
+    ))}
+
+  </div>
+
+</section>
+
+
+    <div class="final">
+      <p>— Fim do Detonado —</p>
+      <a href="/" class="voltar">← Voltar para a página inicial</a>
+    </div>
+
+  </main>
+
+</Layout>
+
+
+<style>
+
+  main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 60px 20px;
+  }
+
+  .cabecalho {
+    text-align: center;
+    margin-bottom: 50px;
+  }
+
+  h1 {
+    color: #00eaff;
+  }
+
+  p {
+    color: #aaa;
+  }
+
+  .detonado img {
+    display: block;
+    width: 100%;
+    max-width: 900px;
+    height: auto;
+    margin: 0 auto 30px;
+  }
+
+  .logo-link {
+    display: block;
+    width: fit-content;
+    margin: 0 auto 20px;
+  }
+
+  .logo {
+    width: 180px;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+    transition: transform 0.2s ease;
+  }
+
+  .logo-link:hover .logo {
+    transform: scale(1.05);
+  }
+
+  .voltar {
+    display: block;
+    width: fit-content;
+    margin: 0 auto 30px;
+    color: #00eaff;
+    text-decoration: none;
+  }
+
+  .voltar:hover {
+    color: #ff00ff;
+    text-decoration: underline;
+  }
+
+  .final {
+    text-align: center;
+    padding: 20px 0 40px;
+  }
+
+</style>
