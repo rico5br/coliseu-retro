@@ -1,0 +1,22 @@
+---
+import Layout from "../layouts/Layout.astro";
+import PlatformPage from "../components/PlatformPage.astro";
+
+const games = [
+  {
+    title: "Knights of the Round",
+    description: "Knights of the Round para Arcade.",
+    href: "/detonados/knightsoftheround/",
+  },
+];
+---
+
+<Layout title="Outros - Coliseu Retro">
+
+  <PlatformPage
+    title="PC"
+    description="Jogos clássicos do Arcade e outras plataformas.."
+    games={games}
+  />
+
+</Layout>

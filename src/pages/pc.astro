@@ -2,14 +2,20 @@
 import Layout from "../layouts/Layout.astro";
 import PlatformPage from "../components/PlatformPage.astro";
 
-const games = [];
+const games = [
+  {
+    title: "Detonado de Max Payne 2",
+    description: "Max Payne 2 para PC.",
+    href: "/detonados/maxpayne2/",
+  },
+];
 ---
 
-<Layout title="PC - Coliseu Retrô">
+<Layout title="PC - Coliseu Retro">
 
   <PlatformPage
     title="PC"
-    description="Jogos clássicos, guias e conteúdos para PC."
+    description="Detonados, jogos e conteúdos clássicos do PC."
     games={games}
   />
 
