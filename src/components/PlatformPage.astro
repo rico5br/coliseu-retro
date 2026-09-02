@@ -83,12 +83,14 @@ const { title, description, games } = Astro.props;
   }
 
   .platform-header {
-    text-align: center;
-    margin-bottom: 50px;
-  }
+  text-align: center;
+  margin-bottom: 50px;
+}
+
 .platform-logo {
-  display: inline-block;
-  margin-bottom: 20px;
+  display: block;
+  width: fit-content;
+  margin: 0 auto 20px;
 }
 
 .platform-logo img {
@@ -102,21 +104,21 @@ const { title, description, games } = Astro.props;
   transform: scale(1.04);
 }
 
-  .back-link {
-    display: inline-block;
-    margin-bottom: 30px;
+.back-link {
+  display: block;
+  width: fit-content;
+  margin: 0 auto 30px;
 
-    color: #00eaff;
-    text-decoration: none;
+  color: #00eaff;
+  text-decoration: none;
 
-    transition: color 0.2s ease;
-  }
+  transition: color 0.2s ease;
+}
 
-  .back-link:hover {
-    color: #ff00ff;
-    text-decoration: underline;
-  }
-
+.back-link:hover {
+  color: #ff00ff;
+  text-decoration: underline;
+}
   .platform-header h1 {
     margin: 0 0 12px;
 
