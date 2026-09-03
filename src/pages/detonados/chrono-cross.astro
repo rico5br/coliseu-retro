@@ -3,6 +3,7 @@ import Layout from "../../layouts/Layout.astro";
 import Cusdis from "../../components/Cusdis.astro";
 
 const paginas = Array.from({ length: 46 }, (_, i) => i + 1);
+const pageUrl = Astro.url.href;
 ---
 
 <Layout title="Detonado de Chrono Cross">
