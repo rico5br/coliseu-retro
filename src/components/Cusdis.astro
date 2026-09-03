@@ -1,0 +1,21 @@
+---
+interface Props {
+  id: string;
+  url: string;
+  title: string;
+}
+
+const { id, url, title } = Astro.props;
+const appId = import.meta.env.PUBLIC_CUSDIS_APP_ID;
+---
+
+<div
+  id="cusdis_thread"
+  data-host="https://cusdis.com"
+  data-app-id={appId}
+  data-page-id={id}
+  data-page-url={url}
+  data-page-title={title}
+></div>
+
+<script is:inline src="https://cusdis.com/js/cusdis.es.js" async defer></script>
