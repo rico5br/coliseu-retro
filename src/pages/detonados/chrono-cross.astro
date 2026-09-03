@@ -3,10 +3,11 @@ import Layout from "../../layouts/Layout.astro";
 import Cusdis from "../../components/Cusdis.astro";
 
 const paginas = Array.from({ length: 46 }, (_, i) => i + 1);
+const pageTitle = "Detonado de Chrono Cross";
 const pageUrl = Astro.url.href;
 ---
 
-<Layout title="Detonado de Chrono Cross">
+<Layout title={pageTitle}>
 
   <main>
 
@@ -58,9 +59,7 @@ const pageUrl = Astro.url.href;
         url={pageUrl} 
         title={pageTitle} 
       />
-
-</section>
-
+    </section>
 
     <div class="final">
       <p>— Fim do Detonado —</p>
@@ -136,7 +135,8 @@ const pageUrl = Astro.url.href;
     text-align: center;
     padding: 20px 0 40px;
   }
-.comentarios {
+
+  .comentarios {
     margin: 60px auto 40px;
     max-width: 900px;
   }
