@@ -1,7 +1,12 @@
 ---
 import Layout from "../../layouts/Layout.astro";
+import Cusdis from "../../components/Cusdis.astro";
+
 
 const paginas = Array.from({ length: 5 }, (_, i) => i + 1);
+const pageTitle = "Detonado de Knights of the Round";
+const pageUrl = Astro.url.href;
+
 ---
 
 <Layout title="Detonado de Knights of the Round">
@@ -53,6 +58,15 @@ const paginas = Array.from({ length: 5 }, (_, i) => i + 1);
       <a href="/" class="voltar">← Voltar para a página inicial</a>
     </div>
 
+<!-- Caixa de Comentários do Cusdis movida para o final -->
+    <section class="comentarios">
+      <h2 class="comentarios-titulo">Comentários</h2>
+      <Cusdis 
+        id="detonado-knightsoftheround" 
+        url={pageUrl} 
+        title={pageTitle} 
+      />
+    </section>
   </main>
 
 </Layout>
@@ -121,6 +135,16 @@ const paginas = Array.from({ length: 5 }, (_, i) => i + 1);
   .final {
     text-align: center;
     padding: 20px 0 40px;
+  }
+.comentarios {
+    margin: 60px auto 40px;
+    max-width: 900px;
+  }
+
+  .comentarios-titulo {
+    color: #00eaff;
+    text-align: center;
+    margin-bottom: 20px;
   }
 
 </style>
