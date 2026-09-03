@@ -1,5 +1,6 @@
 ---
 import Layout from "../../layouts/Layout.astro";
+import Cusdis from "../../components/Cusdis.astro";
 
 const paginas = Array.from({ length: 46 }, (_, i) => i + 1);
 ---
@@ -45,6 +46,17 @@ const paginas = Array.from({ length: 46 }, (_, i) => i + 1);
     ))}
 
   </div>
+
+</section>
+
+    <!-- Caixa de Comentários do Cusdis -->
+    <section class="comentarios">
+      <h2 class="comentarios-titulo">Comentários</h2>
+      <Cusdis 
+        id="detonado-chrono-cross" 
+        url={pageUrl} 
+        title={pageTitle} 
+      />
 
 </section>
 
@@ -122,6 +134,16 @@ const paginas = Array.from({ length: 46 }, (_, i) => i + 1);
   .final {
     text-align: center;
     padding: 20px 0 40px;
+  }
+.comentarios {
+    margin: 60px auto 40px;
+    max-width: 900px;
+  }
+
+  .comentarios-titulo {
+    color: #00eaff;
+    text-align: center;
+    margin-bottom: 20px;
   }
 
 </style>
